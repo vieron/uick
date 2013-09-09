@@ -1,4 +1,6 @@
-![UICK](http://dl.dropbox.com/s/s608xft9ie08oe1/uick.jpg)
+<p align="center">
+	<img src="http://dl.dropbox.com/s/s608xft9ie08oe1/uick.jpg" alt="uick logo"/>
+</p>
 
 
 # uick
