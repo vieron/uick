@@ -24,19 +24,21 @@ module.exports = function(grunt) {
                   ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */ '
     },
     uglify: {
-      options: {
-        banner: '<%= meta.minibanner %>\n'
-      },
       build: {
-        src: 'build/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        options: {
+          banner: '<%= meta.minibanner %>\n'
+        },
+        files: {
+          'build/<%= pkg.name %>.min.js': ['build/<%= pkg.name %>.js'],
+          'build/<%= pkg.name %>-standalone.min.js': ['build/<%= pkg.name %>-standalone.js']
+        }
       }
     },
     cssmin: {
       compress: {
         options: {
           keepSpecialComments: 0,
-          banner: '<%= meta.minibanner %>\n'
+          banner: '<%= meta.minibanner %>'
         },
         files: {
           "build/<%= pkg.name %>.min.css": ["build/<%= pkg.name %>.css"]
@@ -64,22 +66,42 @@ module.exports = function(grunt) {
     },
 
     concat: {
+      css:{
+        options: {
+          separator: ';',
+          banner: "<%= meta.minibanner %>\n"
+        },
+        files: {
+          'build/<%= pkg.name %>.css': ['build/<%= pkg.name %>.css']
+        },
+      },
+      component:{
+        options: {
+          separator: ';',
+          banner: "<%= meta.minibanner %>\n"
+        },
+        files: {
+          'build/<%= pkg.name %>.js': ['build/<%= pkg.name %>.js']
+        },
+      },
       standalone: {
         options: {
+          separator: ';',
+          banner: "<%= meta.minibanner %>\n",
           // banner: "Uick.register([\"<%= _.map(_.keys(components.dependencies), function(c){ return c.split('/')[1].replace('ui-', ''); }).join('\", \"') %>\"]);\n",
           process: function(src, filepath) {
             return src + "\n\nuick.register([\"" + _.map(_.keys(grunt.config('components').dependencies), function(c){ return c.split('/')[1].replace('ui-', ''); }).join('\", \"') + "\"]);\n"
           }
         },
         files: {
-          'build/uick-standalone.js': ['build/uick-standalone.js']
+          'build/<%= pkg.name %>-standalone.js': ['build/<%= pkg.name %>-standalone.js']
         },
       },
     },
 
     watch: {
       files: ['index.js', 'Gruntfile.js'],
-      tasks: ['component_build', 'uglify', 'cssmin', 'concat']
+      tasks: ['component_build', 'concat', 'uglify', 'cssmin', ]
     }
   });
 
@@ -91,6 +113,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-component-build');
 
   // Default task(s).
-  grunt.registerTask('default', ['component_build', 'uglify', 'cssmin', 'concat']);
+  grunt.registerTask('default', ['component_build', 'concat', 'uglify', 'cssmin']);
 
 };
