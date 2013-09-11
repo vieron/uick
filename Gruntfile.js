@@ -48,20 +48,49 @@ module.exports = function(grunt) {
         output: './build/',
         styles: true,
         scripts: true,
-        verbose: true,
-        standalone: true
+        verbose: true
+        // , standalone: true
         // , noRequire: true
+      },
+
+      "uick-standalone": {
+        output: './build/',
+        styles: false,
+        scripts: true,
+        verbose: true,
+        noRequire: true,
+        standalone: true
       }
+    },
+
+    concat: {
+      standalone: {
+        options: {
+          // banner: "Uick.register([\"<%= _.map(_.keys(components.dependencies), function(c){ return c.split('/')[1].replace('ui-', ''); }).join('\", \"') %>\"]);\n",
+          process: function(src, filepath) {
+            return src + "\n\nuick.register([\"" + _.map(_.keys(grunt.config('components').dependencies), function(c){ return c.split('/')[1].replace('ui-', ''); }).join('\", \"') + "\"]);\n"
+          }
+        },
+        files: {
+          'build/uick-standalone.js': ['build/uick-standalone.js']
+        },
+      },
+    },
+
+    watch: {
+      files: ['index.js', 'Gruntfile.js'],
+      tasks: ['component_build', 'uglify', 'cssmin', 'concat']
     }
   });
 
   // Load the plugin that provides the "uglify" task.
-  // grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-component-build');
 
   // Default task(s).
-  grunt.registerTask('default', ['component_build', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['component_build', 'uglify', 'cssmin', 'concat']);
 
 };
