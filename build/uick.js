@@ -1,4 +1,3 @@
-;(function(){
 
 /**
  * Require the given path.
@@ -629,7 +628,7 @@ require.register("component-event/index.js", function(exports, require, module){
 
 exports.bind = function(el, type, fn, capture){
   if (el.addEventListener) {
-    el.addEventListener(type, fn, capture);
+    el.addEventListener(type, fn, capture || false);
   } else {
     el.attachEvent('on' + type, fn);
   }
@@ -649,7 +648,7 @@ exports.bind = function(el, type, fn, capture){
 
 exports.unbind = function(el, type, fn, capture){
   if (el.removeEventListener) {
-    el.removeEventListener(type, fn, capture);
+    el.removeEventListener(type, fn, capture || false);
   } else {
     el.detachEvent('on' + type, fn);
   }
@@ -1015,6 +1014,7 @@ module.exports = UICheckbox;
 function UICheckbox(el) {
 	this.el = el || domify(template);
 	this.checkbox = this.el.querySelector('input');
+	if (!this.checkbox) { return false; }
 
 	this.classes = classes(this.el);
 
@@ -1082,6 +1082,7 @@ fn.onclick = function(e) {
 
 	this.toggle();
 }
+
 });
 require.register("scttnlsn-events/index.js", function(exports, require, module){
 
@@ -2683,7 +2684,59 @@ fn.onInputChange = function(e) {
 
 });
 require.register("uick/index.js", function(exports, require, module){
+var Uick = function(selector, context) {
+	return new Uick.fn.init(selector, context);
+}
 
+Uick.fn = Uick.prototype = {
+	version: '',
+
+	init: function(selector, context) {
+		this.el = selector.nodeType ? [selector] : (context, document).querySelectorAll(selector);
+	},
+
+	api: function(n) {
+		return (n && n.nodeType ? n : this.el[(n || 0)]).component;
+	}
+};
+
+Uick.fn.init.prototype = Uick.fn;
+
+
+Uick.components = {};
+
+Uick.register = function(name, cls) {
+	if (typeof name === 'object' && name.length) {
+		for (var i = 0; i < name.length; i++) {
+			Uick.register(name[i], cls);
+		}
+		return;
+	}
+	var method = name.replace('-', '_');
+	cls = cls || Uick.components[name] || require('ui-' + name);
+	Uick.components[name] || (Uick.components[name] = cls);
+
+	cls.prototype.api || (cls.prototype.api = function() { return this; });
+
+	Uick.fn[method] = function(opts) {
+		var el = this.el,
+			l = el.length,
+			ins;
+		for (var i = 0; i < l; i++) {
+			ins = new cls(el[i], opts);
+			el[i].component = ins;
+			cls.uick = this;
+			if (l === 1) { return ins; }
+		}
+		return this;
+	}
+};
+
+Uick.error = function(msg) {
+	throw new Error(msg);
+};
+
+module.exports = Uick;
 });
 
 
@@ -2806,10 +2859,4 @@ require.alias("component-classes/index.js", "vieron-ui-input-slider/deps/classes
 require.alias("component-indexof/index.js", "component-classes/deps/indexof/index.js");
 
 require.alias("vieron-ui-input-slider/index.js", "vieron-ui-input-slider/index.js");
-require.alias("uick/index.js", "uick/index.js");if (typeof exports == "object") {
-  module.exports = require("uick");
-} else if (typeof define == "function" && define.amd) {
-  define(function(){ return require("uick"); });
-} else {
-  this["uick"] = require("uick");
-}})();
+require.alias("uick/index.js", "uick/index.js");
