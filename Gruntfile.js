@@ -1,5 +1,6 @@
 var fs   = require('fs')
-    sass = require('component-sass');
+    sass = require('component-sass'),
+    _ = require('underscore');
 
 
 
