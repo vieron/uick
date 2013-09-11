@@ -30,6 +30,8 @@
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-component-build": "~0.3.2",
-    "component-sass": "~0.1.2"
+    "component-sass": "~0.1.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "underscore": "~1.5.2"
   }
 }
