@@ -885,14 +885,14 @@ require.register("yields-prevent/index.js", function(exports, require, module){
 
 /**
  * prevent default on the given `e`.
- *
+ * 
  * examples:
- *
+ * 
  *      anchor.onclick = prevent;
  *      anchor.onclick = function(e){
  *        if (something) return prevent(e);
  *      };
- *
+ * 
  * @param {Event} e
  */
 
@@ -908,15 +908,15 @@ require.register("yields-stop/index.js", function(exports, require, module){
 
 /**
  * stop propagation on the given `e`.
- *
+ * 
  * examples:
- *
+ * 
  *      anchor.onclick = require('stop');
  *      anchor.onclick = function(e){
  *        if (!some) return require('stop')(e);
  *      };
- *
- *
+ * 
+ * 
  * @param {Event} e
  */
 
@@ -1014,15 +1014,8 @@ module.exports = UICheckbox;
 
 function UICheckbox(el) {
 	this.el = el || domify(template);
-	this.checkbox = this.el.querySelector('input');
-	if (!this.checkbox) { return false; }
 
-	this.classes = classes(this.el);
-
-	this.events = events(this.el, this);
-  	this.events.bind('click');
-
-  	this.init();
+  this.init();
 }
 
 
@@ -1030,6 +1023,15 @@ var fn = UICheckbox.prototype;
 Emitter(fn);
 
 fn.init = function() {
+	this.checkbox = this.el.querySelector('input');
+
+	if (!this.checkbox) { return this; }
+
+	this.classes = classes(this.el);
+	this.events = events(this.el, this);
+
+	this.events.bind('click');
+
 	if (this.checkbox.checked) {
 		this.check();
 	} else {
@@ -1083,7 +1085,6 @@ fn.onclick = function(e) {
 
 	this.toggle();
 }
-
 });
 require.register("scttnlsn-events/index.js", function(exports, require, module){
 
@@ -1270,7 +1271,7 @@ require.register("yields-scrolltop/index.js", function(exports, require, module)
 
 /**
  * get the window's scrolltop.
- *
+ * 
  * @return {Number}
  */
 
@@ -2161,17 +2162,17 @@ module.exports = UISelect;
 });
 require.register("DamonOehlman-stylar/index.js", function(exports, require, module){
 /* ~stylar~
- *
+ * 
  * Simple Object Query Language
- *
+ * 
  * -meta---
  * version:    0.1.5
  * builddate:  2012-10-30T04:14:02.461Z
  * generator:  interleave@0.5.23
- *
- *
- *
- */
+ * 
+ * 
+ * 
+ */ 
 
 // umdjs returnExports pattern: https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
@@ -2188,40 +2189,40 @@ require.register("DamonOehlman-stylar/index.js", function(exports, require, modu
         getComputed = null,
         reDash = /^(\w+)\-(\w)/,
         reVendorPrefixes = /^\-\w+\-/;
-
+        
     if (document.defaultView && typeof document.defaultView.getComputedStyle == 'function') {
         getComputed = document.defaultView.getComputedStyle;
     }
-
+        
     function sniffProperty(element, attribute) {
         var dashMatch, ii, prefix, prefixedAttr;
-
+        
         // strip off css vendor prefixes
         attribute = attribute.replace(reVendorPrefixes, '');
-
+        
         // convert delimiting dashes into camel case ids
         dashMatch = reDash.exec(attribute);
         while (dashMatch) {
             attribute = dashMatch[1] + dashMatch[2].toUpperCase() + attribute.slice(dashMatch[0].length);
             dashMatch = reDash.exec(attribute);
         }
-
+        
         // search the known prefix
         for (ii = prefixes.length; ii--; ) {
             prefix = prefixes[ii];
             prefixedAttr = prefix ? (prefix + attribute[0].toUpperCase() + attribute.slice(1)) : attribute;
-
+                
             if (typeof element.style[prefixedAttr] != 'undefined') {
                 return knownKeys[attribute] = prefixedAttr;
             }
         }
-
+        
         return attribute;
     }
-
+    
     function stylar(elements, attribute, value) {
         var helpers = { get: getter, set: setter };
-
+        
         if (typeof elements == 'string' || elements instanceof String) {
             elements = document.querySelectorAll(elements);
         }
@@ -2230,26 +2231,26 @@ require.register("DamonOehlman-stylar/index.js", function(exports, require, modu
         else if (typeof elements.length == 'undefined') {
             elements = [elements];
         } // if..else
-
+        
         function getter(attr, ignoreComputed) {
             var readKey, style;
-
+            
             // get the read key
             readKey = knownKeys[attr] || sniffProperty(elements[0], attr);
-
+    
             // if we have the get computed function defined, and the opts.ignoreComputed is not set
             // then get the computed style fot eh element
             if (getComputed && (! ignoreComputed)) {
                 style = getComputed.call(document.defaultView, elements[0]);
             }
-            // otherwise, just return the style element
+            // otherwise, just return the style element 
             else {
                 style = elements[0].style;
             }
-
+                
             return style ? style[readKey] : '';
         }
-
+        
         function setter(attr, val) {
             if (typeof attr == 'object' && (! (attr instanceof String))) {
                 // if we have been passed an object, then iterate through the keys and update
@@ -2260,17 +2261,17 @@ require.register("DamonOehlman-stylar/index.js", function(exports, require, modu
             }
             else {
                 var styleKey = knownKeys[attr] || sniffProperty(elements[0], attr);
-
+    
                 for (var ii = elements.length; ii--; ) {
                     elements[ii].style[styleKey] = val;
                 }
             }
-
+            
             return helpers;
         }
-
+        
         // iterate through the elements
-
+        
         // if we are in set mode, then update the attribute with the value
         if (typeof attribute == 'undefined') {
             return helpers;
@@ -2282,9 +2283,9 @@ require.register("DamonOehlman-stylar/index.js", function(exports, require, modu
             return getter(attribute);
         }
     }
-
+    
     stylar.sniffProperty = sniffProperty;
-
+    
     return typeof stylar != 'undefined' ? stylar : undefined;
 }));
 });
@@ -2341,7 +2342,7 @@ var d = document,
     mouseEvents = {
       start: 'mousedown',
       move: 'mousemove',
-      end: 'mouseup'
+      end: 'mouseup'        
     },
     touchEvents = {
       start: 'touchstart',
@@ -2413,7 +2414,7 @@ Draggy.prototype = {
 
     d.addEventListener(events.move, dragMove);
     d.addEventListener(events.end, dragEnd);
-
+    
     // Move draggy object using CSS3 translate3d
     function dragMove (e) {
       e.preventDefault();
@@ -2616,7 +2617,7 @@ fn.init = function() {
 		this.value(val);
 	}
 
-
+	return this;
 };
 
 fn.events = function() {
