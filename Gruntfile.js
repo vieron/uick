@@ -99,6 +99,20 @@ module.exports = function(grunt) {
       },
     },
 
+    mocha: {
+      uick: {
+        src: ['tests/index.html'],
+        options: {
+          mocha: {
+            ignoreLeaks: false
+          },
+          reporter: 'Spec',
+          // Indicates whether 'mocha.run()' should be executed in 'bridge.js'
+          run: true
+        }
+      }
+    },
+
     watch: {
       files: ['index.js', 'Gruntfile.js'],
       tasks: ['component_build', 'concat', 'uglify', 'cssmin', ]
@@ -111,8 +125,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-component-build');
+  grunt.loadNpmTasks('grunt-mocha');
 
   // Default task(s).
   grunt.registerTask('default', ['component_build', 'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('test', ['mocha']);
 
 };
