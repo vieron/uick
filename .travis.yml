@@ -3,7 +3,7 @@ node_js:
   - "0.8"
 before_script:
   - npm intall -g
-  - component intall
+  - component install
 script:
   - grunt
   - grunt test
