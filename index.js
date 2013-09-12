@@ -6,16 +6,30 @@ Uick.fn = Uick.prototype = {
 	version: '',
 
 	init: function(selector, context) {
+		this.components = {}; //instances of components for the current uick instance
 		this.el = selector.nodeType ? [selector] : (context, document).querySelectorAll(selector);
 	},
 
-	api: function(n) {
-		return (n && n.nodeType ? n : this.el[(n || 0)]).component;
+	api: function(componentName, n) {
+		var firstIsString = typeof componentName === 'string';
+
+		if (firstIsString) {
+			if (n && n.nodeType) {
+				return n[componentName];
+			}
+
+			if (n >= 0) {
+				return this.components[componentName][n];
+			}
+
+			return this.components[componentName];
+		}
+
+		return this.components;
 	}
 };
 
 Uick.fn.init.prototype = Uick.fn;
-
 
 Uick.components = {};
 
@@ -26,9 +40,10 @@ Uick.register = function(name, cls) {
 		}
 		return;
 	}
+
 	var method = name.replace('-', '_');
-	cls = cls || Uick.components[name] || require('ui-' + name);
-	Uick.components[name] || (Uick.components[name] = cls);
+	cls = cls || Uick.components[method] || require('ui-' + name);
+	Uick.components[method] || (Uick.components[method] = cls);
 
 	cls.prototype.api || (cls.prototype.api = function() { return this; });
 
@@ -36,11 +51,14 @@ Uick.register = function(name, cls) {
 		var el = this.el,
 			l = el.length,
 			ins;
+
+		this.components[method] || (this.components[method] = []);
+
 		for (var i = 0; i < l; i++) {
 			ins = new cls(el[i], opts);
-			el[i].component = ins;
-			cls.uick = this;
-			if (l === 1) { return ins; }
+			this.components[method].push(ins);
+			el[i][method] = ins;
+			ins.uick = this;
 		}
 		return this;
 	}
