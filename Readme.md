@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://api.travis-ci.org/vieron/uick.png" alt="build status">
+  <a href="https://travis-ci.org/vieron/uick" target="_blank">
+    <img src="https://api.travis-ci.org/vieron/uick.png" alt="build status">
+  </a>
 	<img src="http://dl.dropbox.com/s/s608xft9ie08oe1/uick.jpg" alt="uick logo"/>
 </p>
 
@@ -32,7 +34,7 @@ Provides an unified API for all the uick components, which are namespaced under 
 // require uick
 var uick = require('uick');
 
-// register uick components that will be used (all should be in the component.json) 
+// register uick components that will be used (all should be in the component.json)
 uick.register(["checkbox", "select", "input-slider"]);
 
 // create a new instance from an existing checkbox
