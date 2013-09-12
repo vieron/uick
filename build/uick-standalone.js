@@ -1,4 +1,4 @@
-/*! uick - v0.0.1 - 2013-09-12 - * http://vieron.net - Copyright (c) 2013 vieron; Licensed MIT */ 
+/*! uick - v0.0.1 - 2013-09-13 - * http://vieron.net - Copyright (c) 2013 vieron; Licensed MIT */ 
 ;(function(){
 
 /**
@@ -2581,16 +2581,9 @@ function UIInputSlider(el, opts) {
 	var self = this;
 	this.el = typeof el === 'string' ? doc.querySelector(el) : el;
 	this.opts = extend({}, defaults, opts);
-	this.opts.draggy = extend({}, defaults.draggy, opts.draggy);
+	this.opts.draggy = extend({}, defaults.draggy, opts && opts.draggy || {});
 
 	this.opts.draggy.onChange = function(x, y) { self.onChange(x, y) };
-
-	this.handle = this.el.querySelector(this.opts.handle);
-	this.handleWidth = parseInt(this.handle.offsetWidth, 10);
-
-	this.area = this.el.querySelector(this.opts.sliderArea);
-	this.input = this.el.querySelector(this.opts.input);
-	this.fill = this.el.querySelector(this.opts.fill);
 
 	this.init();
 }
@@ -2602,6 +2595,18 @@ Emitter(fn);
 fn.init = function() {
 	var val;
 
+	this.handle = this.el.querySelector(this.opts.handle);
+	this.area = this.el.querySelector(this.opts.sliderArea);
+	this.input = this.el.querySelector(this.opts.input);
+	this.fill = this.el.querySelector(this.opts.fill);
+
+	if (!this.handle || !this.sliderArea) {
+		// throw new Error('handle or sliderArea are required');
+		return this;
+	}
+
+	this.handleWidth = parseInt(this.handle.offsetWidth, 10);
+
 	classes(this.el).add('ui-theme-' + this.opts.theme);
 	this.draggy = new Draggy(this.handle, this.opts.draggy);
 	this.prevLimitX = this.draggy.ele.limitsX[1];
@@ -2611,6 +2616,8 @@ fn.init = function() {
 	if ((val = this.value()) > 0) {
 		this.value(val);
 	}
+
+
 };
 
 fn.events = function() {
@@ -2694,16 +2701,30 @@ Uick.fn = Uick.prototype = {
 	version: '',
 
 	init: function(selector, context) {
+		this.components = {}; //instances of components for the current uick instance
 		this.el = selector.nodeType ? [selector] : (context, document).querySelectorAll(selector);
 	},
 
-	api: function(n) {
-		return (n && n.nodeType ? n : this.el[(n || 0)]).component;
+	api: function(componentName, n) {
+		var firstIsString = typeof componentName === 'string';
+
+		if (firstIsString) {
+			if (n && n.nodeType) {
+				return n[componentName];
+			}
+
+			if (n >= 0) {
+				return this.components[componentName][n];
+			}
+
+			return this.components[componentName];
+		}
+
+		return this.components;
 	}
 };
 
 Uick.fn.init.prototype = Uick.fn;
-
 
 Uick.components = {};
 
@@ -2714,9 +2735,10 @@ Uick.register = function(name, cls) {
 		}
 		return;
 	}
+
 	var method = name.replace('-', '_');
-	cls = cls || Uick.components[name] || require('ui-' + name);
-	Uick.components[name] || (Uick.components[name] = cls);
+	cls = cls || Uick.components[method] || require('ui-' + name);
+	Uick.components[method] || (Uick.components[method] = cls);
 
 	cls.prototype.api || (cls.prototype.api = function() { return this; });
 
@@ -2724,11 +2746,14 @@ Uick.register = function(name, cls) {
 		var el = this.el,
 			l = el.length,
 			ins;
+
+		this.components[method] || (this.components[method] = []);
+
 		for (var i = 0; i < l; i++) {
 			ins = new cls(el[i], opts);
-			el[i].component = ins;
-			cls.uick = this;
-			if (l === 1) { return ins; }
+			this.components[method].push(ins);
+			el[i][method] = ins;
+			ins.uick = this;
 		}
 		return this;
 	}
