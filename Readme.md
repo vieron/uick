@@ -1,4 +1,5 @@
 <p align="center">
+  <img src="https://api.travis-ci.org/vieron/uick.png" alt="build status">
 	<img src="http://dl.dropbox.com/s/s608xft9ie08oe1/uick.jpg" alt="uick logo"/>
 </p>
 
@@ -112,12 +113,8 @@ Chrome, Firefox, Safari, Opera, IE 9+
 
 ## Specs
 
-<script src="build/uick.js"></script>
+- `destroy` method of uick should call to `destroy` method of each component.
 
-<script>
-	var checkbox = require('ui-checkbox');
-	console.log(checkbox);
-</script>
 
 
 
