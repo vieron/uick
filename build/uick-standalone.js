@@ -2779,7 +2779,6 @@ Uick.register = function(name, cls) {
 			el[i].uick[method] = ins;
 			ins.uick = this;
 		}
-		console.log(el);
 		return this;
 	};
 };
