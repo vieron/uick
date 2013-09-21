@@ -114,7 +114,7 @@ describe('uick', function() {
             this.uick.destroy();
 
             expect(this.uick.components).to.be.empty;
-            expect(this.el.uick).to.be.an('undefined');
+            expect(this.el.uick).to.not.exist;
             expect(this.uick.el).to.be.empty;
         });
 
