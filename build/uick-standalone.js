@@ -1,4 +1,8 @@
-/*! uick - v0.0.1 - 2013-09-13 - * http://vieron.net - Copyright (c) 2013 vieron; Licensed MIT */ 
+/*! uick - v0.0.1 - 2013-09-21
+* http://vieron.net
+* Copyright (c) 2013 vieron; Licensed MIT */
+
+
 ;(function(){
 
 /**
@@ -28,11 +32,13 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module.exports) {
+  if (!module._resolving && !module.exports) {
     var mod = {};
     mod.exports = {};
     mod.client = mod.component = true;
+    module._resolving = true;
     module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
     module.exports = mod.exports;
   }
 
@@ -2696,7 +2702,7 @@ fn.onInputChange = function(e) {
 require.register("uick/index.js", function(exports, require, module){
 var Uick = function(selector, context) {
 	return new Uick.fn.init(selector, context);
-}
+};
 
 Uick.fn = Uick.prototype = {
 	version: '',
@@ -2711,7 +2717,7 @@ Uick.fn = Uick.prototype = {
 
 		if (firstIsString) {
 			if (n && n.nodeType) {
-				return n[componentName];
+				return n.uick[componentName];
 			}
 
 			if (n >= 0) {
@@ -2722,6 +2728,22 @@ Uick.fn = Uick.prototype = {
 		}
 
 		return this.components;
+	},
+
+	destroy: function() {
+		var comps = this.components;
+		for (var i = 0; i < comps.length; i++) {
+			comps[i].destroy && comps[i].destroy();
+		}
+		this.components = {};
+
+		var el = this.el;
+		for (var i = 0; i < el.length; i++) {
+			delete el[i].uick;
+		}
+		this.el = [];
+
+		return this;
 	}
 };
 
@@ -2753,11 +2775,13 @@ Uick.register = function(name, cls) {
 		for (var i = 0; i < l; i++) {
 			ins = new cls(el[i], opts);
 			this.components[method].push(ins);
-			el[i][method] = ins;
+			el[i].uick || (el[i].uick = {});
+			el[i].uick[method] = ins;
 			ins.uick = this;
 		}
+		console.log(el);
 		return this;
-	}
+	};
 };
 
 Uick.error = function(msg) {
