@@ -1,6 +1,6 @@
 var Uick = function(selector, context) {
 	return new Uick.fn.init(selector, context);
-}
+};
 
 Uick.fn = Uick.prototype = {
 	version: '',
@@ -15,7 +15,7 @@ Uick.fn = Uick.prototype = {
 
 		if (firstIsString) {
 			if (n && n.nodeType) {
-				return n[componentName];
+				return n.uick[componentName];
 			}
 
 			if (n >= 0) {
@@ -26,6 +26,22 @@ Uick.fn = Uick.prototype = {
 		}
 
 		return this.components;
+	},
+
+	destroy: function() {
+		var comps = this.components;
+		for (var i = 0; i < comps.length; i++) {
+			comps[i].destroy && comps[i].destroy();
+		}
+		this.components = {};
+
+		var el = this.el;
+		for (var i = 0; i < el.length; i++) {
+			delete el[i].uick;
+		}
+		this.el = [];
+
+		return this;
 	}
 };
 
@@ -57,11 +73,13 @@ Uick.register = function(name, cls) {
 		for (var i = 0; i < l; i++) {
 			ins = new cls(el[i], opts);
 			this.components[method].push(ins);
-			el[i][method] = ins;
+			el[i].uick || (el[i].uick = {});
+			el[i].uick[method] = ins;
 			ins.uick = this;
 		}
+		console.log(el);
 		return this;
-	}
+	};
 };
 
 Uick.error = function(msg) {
