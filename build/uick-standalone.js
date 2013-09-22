@@ -1,4 +1,4 @@
-/*! uick - v0.0.1 - 2013-09-21
+/*! uick - v0.0.1 - 2013-09-22
 * http://vieron.net
 * Copyright (c) 2013 vieron; Licensed MIT */
 
@@ -2700,6 +2700,11 @@ fn.onInputChange = function(e) {
 
 });
 require.register("uick/index.js", function(exports, require, module){
+/**
+ * @class Uick
+ * User interface components kit
+ */
+
 var Uick = function(selector, context) {
 	return new Uick.fn.init(selector, context);
 };
@@ -2707,6 +2712,12 @@ var Uick = function(selector, context) {
 Uick.fn = Uick.prototype = {
 	version: '',
 
+	/**
+	 * @constructor
+	 * Creates a new Uick instance.
+	 * @param {HTMLElement|String} [select] A CSS selector or a HTMLElement from DOM.
+	 * @param {HTMLElement} [context] Find select in context
+	 */
 	init: function(selector, context) {
 		this.components = {}; //instances of components for the current uick instance
 		this.el = selector.nodeType ? [selector] : (context, document).querySelectorAll(selector);
@@ -2731,14 +2742,18 @@ Uick.fn = Uick.prototype = {
 	},
 
 	destroy: function() {
+		var i;
 		var comps = this.components;
-		for (var i = 0; i < comps.length; i++) {
-			comps[i].destroy && comps[i].destroy();
+		for (var comp in this.components) {
+			for (i = 0; i < comps[comp].length; i++) {
+				comps[comp][i].destroy && comps[comp][i].destroy();
+			}
 		}
+
 		this.components = {};
 
 		var el = this.el;
-		for (var i = 0; i < el.length; i++) {
+		for (i = 0; i < el.length; i++) {
 			delete el[i].uick;
 		}
 		this.el = [];
