@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='Uick'>/**
+</span> * @class Uick
+ * User interface components kit
+ */
+
+var Uick = function(selector, context) {
+	return new Uick.fn.init(selector, context);
+};
+
+Uick.fn = Uick.prototype = {
+	version: '',
+
+<span id='Uick-method-constructor'>	/**
+</span>	 * @constructor
+	 * Creates a new Uick instance.
+	 * @param {HTMLElement|String} [select] A CSS selector or a HTMLElement from DOM.
+	 * @param {HTMLElement} [context] Find select in context
+	 */
+	init: function(selector, context) {
+		this.components = {}; //instances of components for the current uick instance
+		this.el = selector.nodeType ? [selector] : (context, document).querySelectorAll(selector);
+	},
+
+	api: function(componentName, n) {
+		var firstIsString = typeof componentName === 'string';
+
+		if (firstIsString) {
+			if (n &amp;&amp; n.nodeType) {
+				return n.uick[componentName];
+			}
+
+			if (n &gt;= 0) {
+				return this.components[componentName][n];
+			}
+
+			return this.components[componentName];
+		}
+
+		return this.components;
+	},
+
+	destroy: function() {
+		var i;
+		var comps = this.components;
+		for (var comp in this.components) {
+			for (i = 0; i &lt; comps[comp].length; i++) {
+				try {
+					comps[comp][i].destroy &amp;&amp; comps[comp][i].destroy();
+				} catch (e) {
+					console.log(e);
+				}
+			}
+		}
+
+		this.components = {};
+
+		var el = this.el;
+		for (i = 0; i &lt; el.length; i++) {
+			delete el[i].uick;
+		}
+		this.el = [];
+
+		return this;
+	}
+};
+
+Uick.fn.init.prototype = Uick.fn;
+
+Uick.components = {};
+
+Uick.register = function(name, cls) {
+	if (typeof name === 'object' &amp;&amp; name.length) {
+		for (var i = 0; i &lt; name.length; i++) {
+			Uick.register(name[i], cls);
+		}
+		return;
+	}
+
+	var method = name.replace('-', '_');
+	cls = cls || Uick.components[method] || require('ui-' + name);
+	Uick.components[method] || (Uick.components[method] = cls);
+
+	cls.prototype.api || (cls.prototype.api = function() { return this; });
+
+	Uick.fn[method] = function(opts) {
+		var el = this.el,
+			l = el.length,
+			ins;
+
+		this.components[method] || (this.components[method] = []);
+
+		for (var i = 0; i &lt; l; i++) {
+			ins = new cls(el[i], opts);
+			this.components[method].push(ins);
+			el[i].uick || (el[i].uick = {});
+			el[i].uick[method] = ins;
+			ins.uick = this;
+		}
+		return this;
+	};
+};
+
+Uick.error = function(msg) {
+	throw new Error(msg);
+};
+
+module.exports = Uick;</pre>
+</body>
+</html>
