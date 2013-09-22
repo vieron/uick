@@ -10,37 +10,33 @@
 
 User interface components kit.
 
-**UNDER DEVELOPMENT**
+**WIP -  YET NOT VALID TO USE IN REAL PROJECTS**
 
 
 uick aims to be a framework for building rich and customizable user interfaces for modern web browsers. It's composed of multiple UI components, which are completely agnostic and have a single responsibility. If you want selects, pick the `ui-select` component, if you want checkboxes, use `ui-checkbox` and so on…
 
 Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) components managed by default with [component](https://github.com/component/component) (the package manager) and they include their own styles, images, scripts, etc.
 
-
-## Features
-
-- Components are completely agnostic and have a single responsibility
-- Components are Responsive
-- Components support touch and mouse events.
-
-
 ## Components
 
-## Core components or npm packages
-- uick-query
-- uick-grunt
-- uick-components-scss
+### Features
 
-### Form elements
+- Components are completely agnostic and have a single responsibility.
+- Components are Responsive.
+- Components support touch and mouse events.
+
+### Core components or npm packages
+- uick-grunt (npm package)
+- generator-uick-component (npm package)
+
+### List of available components
+
+#### Form elements
 - ui-select
 - ui-input-slider
 - ui-checkbox
-- ui-radio
-- ui-colorpicker
 
-
-## Tech specs
+### Tech specs
 
 - Components should have tests covering at least all API methods.
 - Class constructors receive allways the same **arguments** at first: `el` and `options`.
@@ -53,16 +49,6 @@ Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org
 
 **Ideas**
 - If some component needs to be responsive, write a uick module similar to: http://kumailht.com/responsive-elements/
-
-
-
-### uick-components-scss
-- Each component-specific CSS should be in a separated scss file.
-- Write a css style guide based on [idiomatic-css](https://github.com/necolas/idiomatic-css)
-- Follow [BEM methodology](http://bem.info/)
-
-
-## uick components guidelines
 
 
 
@@ -124,16 +110,8 @@ check.toggle());
 
 
 ## API
-
-[http://vieron.github.io/uick/](http://vieron.github.io/uick/)
-
-##### `uick(selector)`
-
-##### *~~uick(selector)~~*`.component([opts])`
-
-##### *~~uick(selector).component([opts])~~*`.api()`
-
-##### `uick.register(component_name [, component_class])`
+    
+    [http://vieron.github.io/uick/](http://vieron.github.io/uick/)
 
 
 ## Browser support
@@ -166,34 +144,53 @@ Remove dependencies you don't want from the `dependencies` array in `component.j
 
 
 ## Create a component
-- `$ git clone uick-component-boilerplate`
-- `$ npm install`
-- `$ component install`
-- `$ gem install jsduck -v=4`
-- `$ grunt`
-- `$ grunt test`
-- `$ grunt docs`
-- create a repo on github, the name should start by: 'ui-'
-- change uick-component-boilerplate remote to your new repo clone url
-- create a gh-pages branch (travis will push documentation to it if build success)
-- generate token for github project
+
+- If you dont have Yeoman installed
+
+    `$ npm install -g yo`
+
+- Then install generator-uick-component
+
+    `$ npm install -g generator-uick-component`
+
+- Make a new directory and `cd` into it
+
+    `$ mkdir ui-my-component && cd $_`
+
+- Run `yo uick-component`
+
+    `$ yo uick-component`
+
+
+- Create the repo in Github
+- Create a gh-pages branch
+- Generate token for github project
     - `$ curl -X POST -u <your_github_username> -H "Content-Type: application/json" -d "{\"scopes\":[\"public_repo\"],\"note\":\"token for pushing from travis\"}" https://api.github.com/authorizations`
-    - `$ cd ui-<your-component>`
+    - `$ cd ui-<your-component>` 
     - `$ gem install travis`
     - `$ travis encrypt -r <user>/<repository> GH_TOKEN=<token> --add env.global`
 
-- Add env var to .travis.yml: REPO="<user>/<repository>"
 - `$ git push -u origin master`
 
 
+
+
+
 ## TO-DO
-- travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
+- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html) 
 - define releases and changelog
-- write command for scaffolding
-- generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
+- ✔ write command for scaffolding
+- ✔ generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
+- ✔ run tests in travis with mocha + chai + panthomjs
 - test coverage
 - page with build status of all the components
 - page listing all dependencies of components
+- **uick-components-scss**
+    - Each component-specific CSS should be in a separated scss file.
+    - Write a css style guide based on [idiomatic-css](https://github.com/necolas/idiomatic-css)
+    - Follow [BEM methodology](http://bem.info/)
+- ui-radio
+- ui-colorpicker
 
 ## License
 
