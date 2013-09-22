@@ -110,8 +110,8 @@ check.toggle());
 
 
 ## API
-    
-    [http://vieron.github.io/uick/](http://vieron.github.io/uick/)
+
+[http://vieron.github.io/uick/](http://vieron.github.io/uick/)
 
 
 ## Browser support
@@ -166,7 +166,7 @@ Remove dependencies you don't want from the `dependencies` array in `component.j
 - Create a gh-pages branch
 - Generate token for github project
     - `$ curl -X POST -u <your_github_username> -H "Content-Type: application/json" -d "{\"scopes\":[\"public_repo\"],\"note\":\"token for pushing from travis\"}" https://api.github.com/authorizations`
-    - `$ cd ui-<your-component>` 
+    - `$ cd ui-<your-component>`
     - `$ gem install travis`
     - `$ travis encrypt -r <user>/<repository> GH_TOKEN=<token> --add env.global`
 
@@ -177,7 +177,7 @@ Remove dependencies you don't want from the `dependencies` array in `component.j
 
 
 ## TO-DO
-- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html) 
+- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
 - define releases and changelog
 - ✔ write command for scaffolding
 - ✔ generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
