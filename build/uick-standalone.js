@@ -636,7 +636,7 @@ require.register("component-event/index.js", function(exports, require, module){
 
 exports.bind = function(el, type, fn, capture){
   if (el.addEventListener) {
-    el.addEventListener(type, fn, capture || false);
+    el.addEventListener(type, fn, capture);
   } else {
     el.attachEvent('on' + type, fn);
   }
@@ -656,7 +656,7 @@ exports.bind = function(el, type, fn, capture){
 
 exports.unbind = function(el, type, fn, capture){
   if (el.removeEventListener) {
-    el.removeEventListener(type, fn, capture || false);
+    el.removeEventListener(type, fn, capture);
   } else {
     el.detachEvent('on' + type, fn);
   }
@@ -1008,21 +1008,29 @@ function match(el, selector) {
 
 });
 require.register("vieron-ui-checkbox/index.js", function(exports, require, module){
-var classes = require('classes')
-  , domify = require('domify')
-  , Emitter = require('emitter')
-  , events = require('events')
-  , prevent = require('prevent')
-  , stop = require('stop')
-  , template = require('./templates/template.html');
+var classes = require('classes'),
+	domify = require('domify'),
+	Emitter = require('emitter'),
+	events = require('events'),
+	prevent = require('prevent'),
+	stop = require('stop'),
+	template = require('./templates/template.html');
 
 
 module.exports = UICheckbox;
 
+/**
+ * @class UICheckbox
+ * Input Checkbox
+ *
+ * @constructor
+ * Creates a new Checkbox instance.
+ * @param {HTMLElement} [el] The input HTML element.
+ */
 function UICheckbox(el) {
 	this.el = el || domify(template);
 
-  this.init();
+	this.init();
 }
 
 
@@ -1035,16 +1043,21 @@ fn.init = function() {
 	if (!this.checkbox) { return this; }
 
 	this.classes = classes(this.el);
-	this.events = events(this.el, this);
-
-	this.events.bind('click');
+	this.events();
 
 	if (this.checkbox.checked) {
 		this.check();
 	} else {
 		this.uncheck();
 	}
-}
+
+	return this;
+};
+
+fn.events = function() {
+	this.elEvents = events(this.el, this);
+	this.elEvents.bind('click', 'onCheck');
+};
 
 fn.check = function() {
 	this.checkbox.checked = true;
@@ -1055,7 +1068,7 @@ fn.check = function() {
 	this.emit('change', true);
 
 	return this;
-}
+};
 
 fn.uncheck = function() {
 	this.checkbox.checked = false;
@@ -1065,7 +1078,7 @@ fn.uncheck = function() {
 
 	this.emit('change', false);
 	return this;
-}
+};
 
 fn.toggle = function() {
 	if (this.checkbox.checked) {
@@ -1075,23 +1088,37 @@ fn.toggle = function() {
 	}
 
 	return this;
-}
+};
 
 fn.name = function(name) {
 	if (!name) {
-		return value(this.checkbox);
+		return this.checkbox.name;
 	}
 
 	this.checkbox.name = name;
 	return this;
-}
+};
 
-fn.onclick = function(e) {
+fn.onCheck = function(e) {
 	prevent(e);
 	stop(e);
 
 	this.toggle();
-}
+};
+
+fn.unbind = function() {
+	if (this.elEvents) {
+		this.elEvents.unbind('click', 'onCheck');
+	}
+};
+
+fn.destroy = fn.unbind;
+
+fn.isChecked = function() {
+	return this.checkbox.checked;
+};
+
+fn.val = fn.isChecked;
 });
 require.register("scttnlsn-events/index.js", function(exports, require, module){
 
@@ -1562,13 +1589,15 @@ var Emitter = require('emitter')
   , data = require('data');
 
 /**
- * Select constructor
+ * @class UISelect
+ * Select component
+ *
+ * @constructor
+ * Creates a new Select instance.
+ * @param {HTMLElement} [select] The original select in DOM.
+ * @param {Object} [options] Configuration object.
  */
-
 function UISelect (select, options) {
-  if (!(this instanceof UISelect))
-    return new UISelect(select, options);
-
   this.fromSelect = select && select.tagName == 'SELECT';
 
   this.fromSelect && (this.selectEl = select);
@@ -1587,7 +1616,6 @@ function UISelect (select, options) {
 }
 
 UISelect.tabindex = 1;
-
 
 var fn = UISelect.prototype;
 
@@ -1626,7 +1654,7 @@ fn.addOptionsFromSelect = function(parent) {
     o = opts[j];
     this.add( o.value, o.innerHTML);
   }
-}
+};
 
 fn.buildFromSelect = function() {
   var i, l;
@@ -1642,7 +1670,7 @@ fn.buildFromSelect = function() {
   }
 
   return this;
-}
+};
 
 
 /**
@@ -1760,7 +1788,7 @@ fn.add = function (value, text, selected) {
     this.select(value);
   }
 
-  this.emit('option', value, text);;
+  this.emit('option', value, text);
 
   return this;
 };
@@ -1805,7 +1833,7 @@ var isLetter = /\w/;
 fn.onkeypress = function (e) {
   if (!this.closed) return;
 
-  var key = e.keyCode
+  var key = e.keyCode;
   var c = String.fromCharCode(key);
 
   if (!isLetter.test(c)) return;
@@ -1944,7 +1972,7 @@ fn.scrollTo = function (value) {
   }
 
   return this;
-}
+};
 
 /**
  * Reposition select
@@ -2118,10 +2146,12 @@ fn.toggle = function () {
 
 
 fn.value = function(val) {
-  if (typeof val === 'undefined') { return this.val; };
+  if (typeof val === 'undefined') { return this.val; }
   this.select(val);
   return this;
-}
+};
+
+fn.destroy = fn.unbind;
 
 /**
  * Get element offset
@@ -2558,12 +2588,12 @@ module.exports = function extend (object) {
 };
 });
 require.register("vieron-ui-input-slider/index.js", function(exports, require, module){
-var Draggy = require('draggy')
-	, extend = require('extend')
-	, classes = require('classes')
-	, events = require('events')
-	, Emitter = require('emitter')
-	, template = require('./templates/template.html');
+var Draggy = require('draggy'),
+	extend = require('extend'),
+	classes = require('classes'),
+	events = require('events'),
+	Emitter = require('emitter'),
+	template = require('./templates/template.html');
 
 module.exports = UIInputSlider;
 
@@ -2577,16 +2607,24 @@ var defaults = {
 	fill: '.ui-input-slider-fill',
 	theme: '',
 	draggy: {
-	    restrictY: true,
-	    bindTo: '.ui-input-slider-area'
+		restrictY: true,
+		bindTo: '.ui-input-slider-area'
 	}
-}
+};
 
 
-
+/**
+ * @class UIInputSlider
+ * Input slider
+ *
+ * @constructor
+ * Creates a new Input Slider instance.
+ * @param {HTMLElement} [el] The input HTML element.
+ * @param {Object} [opts] Configuration object.
+ */
 function UIInputSlider(el, opts) {
 	var self = this;
-	this.el = typeof el === 'string' ? doc.querySelector(el) : el;
+	this.el = el;
 	this.opts = extend({}, defaults, opts);
 	this.opts.draggy = extend({}, defaults.draggy, opts && opts.draggy || {});
 
@@ -2607,7 +2645,7 @@ fn.init = function() {
 	this.input = this.el.querySelector(this.opts.input);
 	this.fill = this.el.querySelector(this.opts.fill);
 
-	if (!this.handle || !this.sliderArea) {
+	if (!this.handle || !this.area) {
 		// throw new Error('handle or sliderArea are required');
 		return this;
 	}
@@ -2620,8 +2658,8 @@ fn.init = function() {
 
 	this.events();
 
-	if ((val = this.value()) > 0) {
-		this.value(val);
+	if ((val = this.val()) > 0) {
+		this.val(val);
 	}
 
 	return this;
@@ -2666,12 +2704,13 @@ fn.setInputVal = function(value) {
 	return this;
 };
 
-fn.value = function(val) {
+fn.val = function(val) {
 	if (typeof val === 'undefined') {
 		val = Math.max(this.opts.min, Math.min(parseFloat(this.input.value), this.opts.max));
 		return val;
 	}
 
+	val = Math.max(0, Math.min(val, this.opts.max));
 	var posX = (parseInt(this.area.offsetWidth - this.handleWidth, 10) * val) / this.opts.max;
 	this.draggy.moveTo(posX, 0);
 	this.onChange(posX, 0);
@@ -2689,14 +2728,15 @@ fn.reposition = function() {
 
 fn.setFillTo = function(x, y) {
 	var d = this.opts.max / 100;
-	stylar(this.fill).set('width', (this.percent / d) + '%');
+	this.fill.style.width = (this.percent / d) + '%';
 	return this;
 };
 
 fn.onInputChange = function(e) {
-	this.value(this.value());
+	this.val(this.val());
 };
 
+fn.destroy = fn.unbind;
 
 });
 require.register("uick/index.js", function(exports, require, module){
@@ -2746,7 +2786,11 @@ Uick.fn = Uick.prototype = {
 		var comps = this.components;
 		for (var comp in this.components) {
 			for (i = 0; i < comps[comp].length; i++) {
-				comps[comp][i].destroy && comps[comp][i].destroy();
+				try {
+					comps[comp][i].destroy && comps[comp][i].destroy();
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		}
 
