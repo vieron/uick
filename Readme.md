@@ -18,6 +18,53 @@ uick aims to be a framework for building rich and customizable user interfaces f
 Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) components managed by default with [component](https://github.com/component/component) (the package manager) and they include their own styles, images, scripts, etc.
 
 
+## Features
+
+- Components are completely agnostic and have a single responsibility
+- Components are Responsive
+- Components support touch and mouse events.
+
+
+## Components
+
+## Core components or npm packages
+- uick-query
+- uick-grunt
+- uick-components-scss
+
+### Form elements
+- ui-select
+- ui-input-slider
+- ui-checkbox
+- ui-radio
+- ui-colorpicker
+
+
+## Tech specs
+
+- Components should have tests covering at least all API methods.
+- Class constructors receive allways the same **arguments** at first: `el` and `options`.
+- If multiple elements are passed to the Component constructor, it should take only the first one. Components should not have logic to handle multiple elements and multiple instances, it's `uick`'s job.
+- Components should not implement the following methods: `api`
+- Components should have `init` and `destroy` methods.
+- If a Component requires CSS should include `uick-components-scss` to inherit common styles.
+- Components should use `uick-query` for querying the DOM.
+- Components should include as little CSS as possible, discard appeareance styles not needed.
+
+**Ideas**
+- If some component needs to be responsive, write a uick module similar to: http://kumailht.com/responsive-elements/
+
+
+
+### uick-components-scss
+- Each component-specific CSS should be in a separated scss file.
+- Write a css style guide based on [idiomatic-css](https://github.com/necolas/idiomatic-css)
+- Follow [BEM methodology](http://bem.info/)
+
+
+## uick components guidelines
+
+
 
 ## Usage
 
@@ -76,9 +123,9 @@ check.toggle());
 ```
 
 
-
-
 ## API
+
+[http://vieron.github.io/uick/](http://vieron.github.io/uick/)
 
 ##### `uick(selector)`
 
@@ -89,35 +136,9 @@ check.toggle());
 ##### `uick.register(component_name [, component_class])`
 
 
-
-
-## List of uick components
-
-- [ui-checkbox]()
-- [ui-select]()
-- [ui-input-slider]()
-
-
-
 ## Browser support
 
 Chrome, Firefox, Safari, Opera, IE 9+
-
-
-
-## uick components guidelines
-- Arguments for Class constructors are always HTMLElement, options object.
-- One call to the constructor returns one instance. If multiple elements are passed component should take only the first one. Components should not have logic to handle multiple elements and multiple instances.
-- All components should have `init` and `destroy` methods.
-- Components should not have the following methods: `api`
-
-
-
-## Specs
-
-- `destroy` method of uick should call to `destroy` method of each component.
-
-
 
 
 ## Installation
@@ -140,6 +161,41 @@ Remove dependencies you don't want from the `dependencies` array in `component.j
 	$ grunt
 
 
+- `travis encrypt -r <user>/<repository> GH_TOKEN=c2d11f0d7740bd2562374b3bdd39c85937960caa --add env.global`
+
+
+
+## Create a component
+- `$ git clone uick-component-boilerplate`
+- `$ npm install`
+- `$ component install`
+- `$ gem install jsduck -v=4`
+- `$ grunt`
+- `$ grunt test`
+- `$ grunt docs`
+- create a repo on github, the name should start by: 'ui-'
+- change uick-component-boilerplate remote to your new repo clone url
+- create a gh-pages branch (travis will push documentation to it if build success)
+- generate token for github project
+    - `$ curl -X POST -u <your_github_username> -H "Content-Type: application/json" -d "{\"scopes\":[\"public_repo\"],\"note\":\"token for pushing from travis\"}" https://api.github.com/authorizations`
+    - `$ cd ui-<your-component>`
+    - `$ gem install travis`
+    - `$ travis encrypt -r <user>/<repository> GH_TOKEN=<token> --add env.global`
+
+- Add env var to .travis.yml: REPO="<user>/<repository>"
+- `$ git push -u origin master`
+
+
+## TO-DO
+- travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
+- define releases and changelog
+- write command for scaffolding
+- generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
+- test coverage
+- page with build status of all the components
+- page listing all dependencies of components
+
 ## License
 
   MIT
+
