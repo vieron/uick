@@ -26,87 +26,15 @@ Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org
 - Components support touch and mouse events.
 
 ### Core components or npm packages
-- uick-grunt (npm package)
-- generator-uick-component (npm package)
+- [uick-grunt (npm package)](https://github.com/vieron/uick-grunt)
+- [generator-uick-component (npm package)](https://github.com/vieron/generator-uick-component)
 
 ### List of available components
 
 #### Form elements
-- ui-select
-- ui-input-slider
-- ui-checkbox
-
-### Tech specs
-
-- Components should have tests covering at least all API methods.
-- Class constructors receive allways the same **arguments** at first: `el` and `options`.
-- If multiple elements are passed to the Component constructor, it should take only the first one. Components should not have logic to handle multiple elements and multiple instances, it's `uick`'s job.
-- Components should not implement the following methods: `api`
-- Components should have `init` and `destroy` methods.
-- If a Component requires CSS should include `uick-components-scss` to inherit common styles.
-- Components should use `uick-query` for querying the DOM.
-- Components should include as little CSS as possible, discard appeareance styles not needed.
-
-**Ideas**
-- If some component needs to be responsive, write a uick module similar to: http://kumailht.com/responsive-elements/
-
-
-
-## Usage
-
-There are two ways to use uick. Requiring uick itself or requiring each component separately.
-If you require uick, yo can [download builds]() which includes all the uick components available, or preferably [do a custom build]().
-
-In both cases, you should read the API documentation for each component you will be using.
-
-##### Requiring uick
-
-Provides an unified API for all the uick components, which are namespaced under the same object. The uick wrapper is somewhat similar to jQuery style API: select elements from DOM, instance new components and play with the component API. All of these with method chaining.
-
-```
-// require uick
-var uick = require('uick');
-
-// register uick components that will be used (all should be in the component.json)
-uick.register(["checkbox", "select", "input-slider"]);
-
-// create a new instance from an existing checkbox
-var check = uick('input[type="checkbox"]').checkbox();
-
-// play with the API
-check.api().toggle();
-
-```
-
-If you are not using [component(1)]() as package manager, you can download `uick-standalone` build and you save the `require('uick')` line. In this case `uick` is exposed to the global scope:
-
-```
-// create a new instance from an existing checkbox
-var check = uick('input[type="checkbox"]').checkbox();
-
-// play with the API
-check.api().toggle();
-
-```
-
-
-
-##### Requiring components separately
-
-All components are `require()`-able modules, so start `require()`-ing the components you want to use. Note that all uick components are prefixed with `ui-`.
-
-```
-// require ui-checkbox component
-var checkbox = require('ui-checkbox');
-var el = document.querySelectorAll('input[type="checkbox"]');
-
-// create a new instance from an existing checkbox
-var check = checkbox(el);
-
-// play with the API
-check.toggle());
-
-```
+- [ui-select](https://github.com/vieron/ui-select)
+- [ui-input-slider](https://github.com/vieron/ui-input-slider)
+- [ui-checkbox](https://github.com/vieron/ui-checkbox)
 
 
 ## API
@@ -127,55 +55,6 @@ Chrome, Firefox, Safari, Opera, IE 9+
 
 
 
-## Custom build
-
-	$ git clone git@github.com:vieron/uick.git
-	$ cd uick
-	$ npm install
-
-Remove dependencies you don't want from the `dependencies` array in `component.json`
-
-	$ component install
-	$ grunt
-
-
-- `travis encrypt -r <user>/<repository> GH_TOKEN=c2d11f0d7740bd2562374b3bdd39c85937960caa --add env.global`
-
-
-
-## Create a component
-
-- If you dont have Yeoman installed
-
-    `$ npm install -g yo`
-
-- Then install generator-uick-component
-
-    `$ npm install -g generator-uick-component`
-
-- Make a new directory and `cd` into it
-
-    `$ mkdir ui-my-component && cd $_`
-
-- Run `yo uick-component`
-
-    `$ yo uick-component`
-
-
-- Create the repo in Github
-- Create a gh-pages branch
-- Generate token for github project
-    - `$ curl -X POST -u <your_github_username> -H "Content-Type: application/json" -d "{\"scopes\":[\"public_repo\"],\"note\":\"token for pushing from travis\"}" https://api.github.com/authorizations`
-    - `$ cd ui-<your-component>`
-    - `$ gem install travis`
-    - `$ travis encrypt -r <user>/<repository> GH_TOKEN=<token> --add env.global`
-
-- `$ git push -u origin master`
-
-
-
-
-
 ## TO-DO
 - ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
 - define releases and changelog
@@ -192,7 +71,12 @@ Remove dependencies you don't want from the `dependencies` array in `component.j
 - ui-radio
 - ui-colorpicker
 
+
+
+## Links
+- touch event libraries
+    - http://www.queness.com/post/11755/11-multi-touch-and-touch-events-javascript-libraries
+
 ## License
 
   MIT
-
