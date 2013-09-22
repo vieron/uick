@@ -44,7 +44,11 @@ Uick.fn = Uick.prototype = {
 		var comps = this.components;
 		for (var comp in this.components) {
 			for (i = 0; i < comps[comp].length; i++) {
-				comps[comp][i].destroy && comps[comp][i].destroy();
+				try {
+					comps[comp][i].destroy && comps[comp][i].destroy();
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		}
 
