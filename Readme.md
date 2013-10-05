@@ -56,11 +56,7 @@ Chrome, Firefox, Safari, Opera, IE 9+
 
 
 ## TO-DO
-- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
 - define releases and changelog
-- ✔ write command for scaffolding
-- ✔ generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
-- ✔ run tests in travis with mocha + chai + panthomjs
 - test coverage
 - page with build status of all the components
 - page listing all dependencies of components
@@ -70,6 +66,10 @@ Chrome, Firefox, Safari, Opera, IE 9+
     - Follow [BEM methodology](http://bem.info/)
 - ui-radio
 - ui-colorpicker
+- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
+- ✔ write command for scaffolding
+- ✔ generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
+- ✔ run tests in travis with mocha + chai + panthomjs
 
 
 
