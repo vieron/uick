@@ -47,21 +47,7 @@ Chrome, Firefox, Safari, Opera, IE 9+
 
 
 ## TO-DO
-- define releases and changelog
-- test coverage
-- page with build status of all the components
-- page listing all dependencies of components
-- **uick-components-scss**
-    - Each component-specific CSS should be in a separated scss file.
-    - Write a css style guide based on [idiomatic-css](https://github.com/necolas/idiomatic-css)
-    - Follow [BEM methodology](http://bem.info/)
-- code rest of form elements (http://nativeformelements.com/)
-    - ui-radio
-    - ui-colorpicker
-- ✔ travis deploy docs if build passed (http://sleepycoders.blogspot.com.es/2013/03/sharing-travis-ci-generated-files.html)
-- ✔ write command for scaffolding
-- ✔ generate docs from source code. (https://github.com/senchalabs/jsduck/wiki)
-- ✔ run tests in travis with mocha + chai + panthomjs
+Moved to the [wiki](https://github.com/vieron/uick/wiki/TO-DO) to avoid contaminating the log.
 
 
 
