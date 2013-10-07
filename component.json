@@ -2,7 +2,7 @@
   "name": "uick",
   "repo": "vieron/uick",
   "description": "user interface components kit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [],
   "dependencies": {
     "vieron/ui-checkbox": "*",
