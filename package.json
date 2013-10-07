@@ -26,6 +26,5 @@
     "grunt": "~0.4.1"
   },
   "devDependencies": {
-    "grunt-conventional-changelog": "~1.0.0"
   }
 }
