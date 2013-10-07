@@ -16,8 +16,7 @@ uick aims to be a framework for building rich and customizable user interfaces f
 
 Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) components managed by default with [component](https://github.com/component/component) (the package manager) and they include their own styles, images, scripts, etc.
 
-uick is under development but if you are interested you can continue reading some in
-formation at the [Wiki](https://github.com/vieron/uick/wiki).
+uick is under development but if you are interested you can continue reading some information at the [Wiki](https://github.com/vieron/uick/wiki).
 
 ### Features
 
