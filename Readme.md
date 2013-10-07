@@ -12,12 +12,12 @@ User interface components kit.
 
 **WIP -  YET NOT VALID TO USE IN REAL PROJECTS**
 
-
 uick aims to be a framework for building rich and customizable user interfaces for modern web browsers. It's composed of multiple UI components, which are completely agnostic and have a single responsibility. If you want selects, pick the `ui-select` component, if you want checkboxes, use `ui-checkbox` and so on…
 
 Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) components managed by default with [component](https://github.com/component/component) (the package manager) and they include their own styles, images, scripts, etc.
 
-## Components
+uick is under development but if you are interested you can continue reading some in
+formation at the [Wiki](https://github.com/vieron/uick/wiki).
 
 ### Features
 
@@ -28,14 +28,6 @@ Each component and *uick* itself are modular [CommonJS](http://wiki.commonjs.org
 ### Core components or npm packages
 - [uick-grunt (npm package)](https://github.com/vieron/uick-grunt)
 - [generator-uick-component (npm package)](https://github.com/vieron/generator-uick-component)
-
-### List of available components
-
-#### Form elements
-- [ui-select](https://github.com/vieron/ui-select)
-- [ui-input-slider](https://github.com/vieron/ui-input-slider)
-- [ui-checkbox](https://github.com/vieron/ui-checkbox)
-
 
 ## API
 
