@@ -1,4 +1,4 @@
-/*! uick - v0.0.1 - 2013-09-22
+/*! uick - v0.0.2 - 2013-10-07
 * http://vieron.net
 * Copyright (c) 2013 vieron; Licensed MIT */
 
